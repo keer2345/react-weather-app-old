@@ -266,5 +266,85 @@ class Weather extends Component {
     // ...
 ```
 
-### 进一步优化
-*Weather.js*
+### 逐步简化组件
+*Weather.js*:
+```javascript
+import React from 'react';
+
+const Weather = function(props) {
+    return (
+        <div>
+            { props.city && props.country && <p>Location: {props.city}, {props.country}</p>}
+            { props.temperature && <p>Temperature: {props.temperature}</p>}
+            { props.humidity && <p>Humidity: {props.humidity}</p>}
+            { props.description && <p>Description: {props.description}</p>}
+            { props.error && <p>Error: {props.error}</p>}
+        </div>
+    );
+}
+
+export default Weather;
+```
+
+```javascript
+import React from 'react';
+
+const Weather = props => {
+    return (
+        <div>
+            { props.city && props.country && <p>Location: {props.city}, {props.country}</p>}
+            { props.temperature && <p>Temperature: {props.temperature}</p>}
+            { props.humidity && <p>Humidity: {props.humidity}</p>}
+            { props.description && <p>Description: {props.description}</p>}
+            { props.error && <p>Error: {props.error}</p>}
+        </div>
+    );
+}
+
+export default Weather;
+```
+
+```javascript
+import React from 'react';
+
+const Weather = props => (
+    <div>
+        { props.city && props.country && <p>Location: {props.city}, {props.country}</p>}
+        { props.temperature && <p>Temperature: {props.temperature}</p>}
+        { props.humidity && <p>Humidity: {props.humidity}</p>}
+        { props.description && <p>Description: {props.description}</p>}
+        { props.error && <p>Error: {props.error}</p>}
+    </div>
+)
+
+export default Weather;
+```
+
+
+同样的，也对*Form.js*和*Titles.js*做处理：
+```javascript
+import React from "react";
+
+const Form = props => (
+    <form onSubmit={props.getWeather}>
+        <input type="text" name="city" placeholder="City"/>
+        <input type="text" name="country" placeholder="country"/>
+        <button>Get Weather</button>
+    </form>
+)
+
+export default Form;
+```
+
+```javascript
+import React from "react";
+
+const Titles = () => (
+  <div>
+    <h1>Wether Finder</h1>
+    <p>Find out temperature, conditions and more ... </p>
+  </div>
+)
+
+export default Titles;
+```
