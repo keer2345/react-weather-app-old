@@ -166,6 +166,105 @@ class Form extends Component {
 }
 ```
 
+现在，输入城市和国家（比如*Manchester*和*uk*）就可以在浏览器终端中看到返回的JSON了。
 
+## 将天气信息显示到页面
+之前是显示在浏览器的终端上，但是我们想要的效果并不是那样，我们希望将信息显示到前端页面。我们在*App.js*创建一个`state`:
+```javascript
 
+class App extends React.Component {
 
+  state = {
+    temperature: undefined,
+    city: undefined,
+    country: undefined,
+    humidity: undefined,
+    description: undefined,
+    error: undefined
+  }
+
+  // ...
+
+  getWeather = async(e) => {
+
+    // ...
+
+    this.setState({
+      temperature:data.main.temp,
+      city:data.name,
+      country:data.sys.country,
+      humidity:data.main.humidity,
+      description:data.weather[0].description,
+      error:""
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <Titles/>
+        <Form getWeather={this.getWeather}/>
+        <Weather 
+          temperature={this.state.temperature}
+          city={this.state.city}
+          country={this.state.country}
+          humidity={this.state.humidity}
+          description={this.state.description}
+          error={this.state.error}
+        />
+      </div>
+    );
+  }
+
+}
+
+export default App;
+```
+
+*Weather.js*:
+```javascript
+class Weather extends Component {
+    render() {
+        return (
+            <div>
+                { this.props.city && this.props.country && <p>Location: {this.props.city}, {this.props.country}</p>}
+                { this.props.temperature && <p>Temperature: {this.props.temperature}</p>}
+                { this.props.humidity && <p>Humidity: {this.props.humidity}</p>}
+                { this.props.description && <p>Description: {this.props.description}</p>}
+                { this.props.error && <p>Error: {this.props.error}</p>}
+            </div>
+        );
+    }
+}
+```
+现在有个问题，如果输入的城市和国家为空的话，则会显示错误信息。我们做一下优化，当输入有误的时候不显示：
+```javascript
+    // ...
+
+    console.log(data);
+
+    if(city && country){
+      this.setState({
+        temperature:data.main.temp,
+        city:data.name,
+        country:data.sys.country,
+        humidity:data.main.humidity,
+        description:data.weather[0].description,
+        error:""
+      });
+    } else {
+      this.setState({
+        temperature: undefined,
+        city: undefined,
+        country: undefined,
+        humidity: undefined,
+        description: undefined,
+        error: "Please enter the right city and country."
+      });
+    }
+
+    // ...
+```
+
+### 进一步优化
+*Weather.js*
